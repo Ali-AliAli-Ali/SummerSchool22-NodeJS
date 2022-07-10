@@ -1,3 +1,5 @@
 let a = 100;
-console.log(a);
-console.log("Have a nice day")
+console.log(a, a, a);
+console.log("yeet");
+
+console.log("654532")
