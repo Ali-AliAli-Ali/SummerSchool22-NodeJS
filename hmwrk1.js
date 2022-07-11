@@ -24,17 +24,17 @@ console.log(newmap(array, randfunc3));*/
     return [arrtrue, arrfalse];
 }*/
     //(2)
-function newpartition(arr, func) {
+/*function newpartition(arr, func) {
     return arr.reduce(function (resarr, current) {
         (func(current)) ? resarr[0].push(current) : resarr[1].push(current);
         return resarr;
       }, [[],[]]);
-    }
+    }*/
 
-function is_odd(num) { return num % 2; }
+/*function is_odd(num) { return num % 2; }
 console.table(newpartition([1, 2, 3, 4, 5, 6, 7], is_odd));
 function is_longer4(word) { return word.length >= 4; }
-console.table(newpartition(["Somebody", "once", "told", "me", "the", "world", "is", "gonna"], is_longer4));
+console.table(newpartition(["Somebody", "once", "told", "me", "the", "world", "is", "gonna"], is_longer4));*/
 
 
 //3
@@ -52,7 +52,7 @@ console.log("1) ", newarr[0]);
     //(2)
 const arrsort = arr.slice().sort();
 is_output = false;
-for (i = 1; i < arr.length; i++) {
+for (let i = 1; i < arr.length; i++) {
     if (arrsort[i-1] === arrsort[i]) { i++; continue; }
     else { console.log("2) ", arrsort[i-1]); is_output = true; break; }
 }
@@ -62,3 +62,48 @@ if (!is_output) console.log("2) ", arrsort.pop())
 res = 0;
 arr.forEach(elem => res ^= elem);
 console.log("2*)", res);*/
+
+
+//4
+class MyIterator{
+    constructor(syms, num) {
+        this.alpht = syms.split("").sort();
+        this.curperm = "";
+        for (let i = 0; i < num; i++) this.curperm += this.alpht[i];
+        this.lastperm = "";
+        for (let i = this.alpht.length - 1; i >= this.alpht.length - num; i--) this.lastperm += this.alpht[i];
+        this.len = num;
+    }
+
+    hasNext() {
+        return this.curperm !== this.lastperm;
+    }
+    next() {
+        if (!this.hasNext()) return;
+
+        let curarr = this.curperm.split("");
+        let minsuit = this.alpht[this.alpht.length - 1], minsuiti = 0;
+        for (let i = this.len - 1; i >= 0; i--) {
+            if (curarr[i] < minsuit && !curarr.includes(this.alpht[this.alpht.indexOf(curarr[i]) + 1])) {
+                minsuit = curarr[i];
+                minsuiti = i;
+                break;
+            }
+        }
+
+        curarr[minsuiti] = this.alpht[this.alpht.indexOf(curarr[minsuiti]) + 1];
+        curarr.splice(minsuiti + 1);
+        for (let i = 0; i < this.len - minsuiti; i++) {
+            if (!curarr.includes(this.alpht[i])) curarr.push(this.alpht[i]);
+        }
+
+        this.curperm = curarr.join("");
+        return this.curperm;
+    }
+}
+
+let test = new MyIterator("bads", 3);
+console.log(test.hasNext());
+console.log(test.next());
+console.log(test.next());
+console.log(test.next());
