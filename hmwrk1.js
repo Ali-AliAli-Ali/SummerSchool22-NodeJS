@@ -82,28 +82,28 @@ class MyIterator{
         if (!this.hasNext()) return;
 
         let curarr = this.curperm.split("");
-        let minsuit = this.alpht[this.alpht.length - 1], minsuiti = 0;
-        for (let i = this.len - 1; i >= 0; i--) {
-            if (curarr[i] < minsuit && !curarr.includes(this.alpht[this.alpht.indexOf(curarr[i]) + 1])) {
-                minsuit = curarr[i];
-                minsuiti = i;
-                break;
+        let isfound = false;
+        for (let i = this.len - 1; i >= 0 && !isfound; i--) {
+            for (let j = this.alpht.indexOf(curarr[i]) + 1; j < this.alpht.length; j++) {
+                curarr.splice(i+1);
+                if (!curarr.includes(this.alpht[j])) {
+                    //minsuit = curarr[i];
+                    curarr[i] = this.alpht[j];
+                    isfound = true;
+                    break;
+                }
             }
         }
 
-        curarr[minsuiti] = this.alpht[this.alpht.indexOf(curarr[minsuiti]) + 1];
-        curarr.splice(minsuiti + 1);
-        for (let i = 0; i < this.len - minsuiti; i++) {
+        for (let i = 0; i < this.alpht.length && curarr.length < this.len; i++) 
             if (!curarr.includes(this.alpht[i])) curarr.push(this.alpht[i]);
-        }
 
         this.curperm = curarr.join("");
         return this.curperm;
     }
 }
 
-let test = new MyIterator("bads", 3);
-console.log(test.hasNext());
-console.log(test.next());
-console.log(test.next());
-console.log(test.next());
+const test = new MyIterator("bads", 1);
+console.log(test.curperm);
+while (test.hasNext())
+    console.log(test.next());
