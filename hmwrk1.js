@@ -19,12 +19,16 @@ const arr = [1, 2, 5, 3, 3, 5, 2, 1, 4];
 
     //(1)
 const newarr = [];
-
 function is_in_newarr(elem) {
     let elemi = newarr.indexOf(elem);
     (elemi === -1) ? newarr.push(elem) : newarr.splice(elemi, 1);
 }
-
 arr.forEach(elem => is_in_newarr(elem));
-console.log(newarr);
+console.log("1) ", newarr[0]);
 
+    //(2)
+const arrsort = arr.slice().sort();
+for (i = 1; i < arr.length; i++) {
+    if (arrsort[i-1] === arrsort[i]) { i++; continue; }
+    else { console.log("2) ", arrsort[i-1]); break; }
+}
