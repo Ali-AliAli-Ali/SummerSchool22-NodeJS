@@ -32,3 +32,8 @@ for (i = 1; i < arr.length; i++) {
     if (arrsort[i-1] === arrsort[i]) { i++; continue; }
     else { console.log("2) ", arrsort[i-1]); break; }
 }
+
+    //(2*)
+res = 0;
+arr.forEach(elem => res ^= elem);
+console.log("2*)", res);
