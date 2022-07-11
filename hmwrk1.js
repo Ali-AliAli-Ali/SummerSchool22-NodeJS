@@ -14,8 +14,12 @@ console.log(newmap(array, randfunc2));
 console.log(newmap(array, randfunc3));*/
 
 
+//2
+
+
+
 //3
-const arr = [1, 2, 5, 3, 3, 5, 2, 1, 4];
+const arr = [1, 2, 4, 3, 3, 5, 2, 1, 4];
 
     //(1)
 const newarr = [];
@@ -28,10 +32,12 @@ console.log("1) ", newarr[0]);
 
     //(2)
 const arrsort = arr.slice().sort();
+is_output = false;
 for (i = 1; i < arr.length; i++) {
     if (arrsort[i-1] === arrsort[i]) { i++; continue; }
-    else { console.log("2) ", arrsort[i-1]); break; }
+    else { console.log("2) ", arrsort[i-1]); is_output = true; break; }
 }
+if (!is_output) console.log("2) ", arrsort.pop())
 
     //(2*)
 res = 0;
