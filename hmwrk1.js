@@ -16,17 +16,26 @@ console.log(newmap(array, randfunc3));*/
 
 //2
     //(1)
-function newpartition(arr, func) {
+/*function newpartition(arr, func) {
     const arrtrue = [], arrfalse = [];
     arr.forEach(elem => {
         (func(elem)) ? arrtrue.push(elem) : arrfalse.push(elem);
     });
     return [arrtrue, arrfalse];
-}
+}*/
+    //(2)
+function newpartition(arr, func) {
+    return arr.reduce(function (resarr, current) {
+        (func(current)) ? resarr[0].push(current) : resarr[1].push(current);
+        return resarr;
+      }, [[],[]]);
+    }
+
 function is_odd(num) { return num % 2; }
 console.table(newpartition([1, 2, 3, 4, 5, 6, 7], is_odd));
-function is_longer4(word) { return (word.length >= 4); }
+function is_longer4(word) { return word.length >= 4; }
 console.table(newpartition(["Somebody", "once", "told", "me", "the", "world", "is", "gonna"], is_longer4));
+
 
 //3
 /*const arr = [1, 2, 4, 3, 3, 5, 2, 1, 4];
