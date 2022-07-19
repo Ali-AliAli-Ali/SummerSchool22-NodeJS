@@ -9,6 +9,7 @@ const server = http.createServer((req, res) => {
     if (req.url === "/ping") {
         res.setHeader("Content-type", "text/html")
         res.write("<h1>Going to make a joke: \n\n</h1>")
+        res.write("<h1>Going: \n\n</h1>")
         return res.end("Yours is pretty low");
     }
 
@@ -16,4 +17,4 @@ const server = http.createServer((req, res) => {
     return res.end("Not found");
 });
 
-server.listen(PORT, () => { console.log(`server is on port ${PORT}`); })
+server.listen(PORT, () => { console.log(`server is on port ${PORT}`); });
