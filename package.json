@@ -1,0 +1,30 @@
+{
+  "name": "summerschool22-nodejs",
+  "version": "1.0.0",
+  "description": "NodeJS homework from MathMech Summer School 2022",
+  "main": "cinema_server.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ali-AliAli-Ali/SummerSchool22-NodeJS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ali-AliAli-Ali/SummerSchool22-NodeJS/issues"
+  },
+  "homepage": "https://github.com/Ali-AliAli-Ali/SummerSchool22-NodeJS#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "pg": "^8.7.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
