@@ -1,14 +1,11 @@
-create TABLE Administrator(
-    admin_token TEXT PRIMARY KEY
-);
+--create TABLE Administrator(
+--    admin_token SERIAL PRIMARY KEY
+--);
 
 create TABLE Poster(
-    title TEXT PRIMARY KEY,
+    title VARCHAR(255) PRIMARY KEY,
     -- picture ???
-    date_of_release DATE,
+    date_of_release TEXT,
     description TEXT,
     rating NUMERIC
-);
-
-create TABLE User(
 );
