@@ -15,6 +15,9 @@ class DB {
         return this.pool.query(`INSERT INTO poster (title, date_of_release, description, rating) values ($1, $2, $3, $4) RETURNING *`,
             [title, date_of_release, description, rating]);
     }
+    getAllPosters() {
+        return this.pool.query("SELECT * FROM poster");
+    }
 }
 
 module.exports = DB;
