@@ -21,6 +21,11 @@ class DB {
     getPoster(title) {
         return this.pool.query(`SELECT * FROM poster where title = $1`, [title]);
     }
+
+    editPoster(title, date_of_release, description, rating) {
+        return this.pool.query('UPDATE poster set date_of_release = $2, description = $3, rating = $4 where title = $1 RETURNING *',
+            [title, date_of_release, description, rating]);
+    }
 }
 
 module.exports = DB;

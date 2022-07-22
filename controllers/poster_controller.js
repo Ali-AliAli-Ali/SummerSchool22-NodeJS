@@ -40,7 +40,9 @@ class PosterController {
     }
 
     async editPoster(req, res) {   //Admin right
-
+        const { title, date_of_release, description, rating } = req.body;
+        const editedPoster = await db.editPoster(title, date_of_release, description, rating);
+        res.json(editedPoster.rows[0]);
     }
     async deletePoster(req, res) { //Admin right
 
