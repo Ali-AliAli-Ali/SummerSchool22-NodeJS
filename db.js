@@ -18,6 +18,9 @@ class DB {
     getAllPosters() {
         return this.pool.query("SELECT * FROM poster");
     }
+    getPoster(title) {
+        return this.pool.query(`SELECT * FROM poster where title = $1`, [title]);
+    }
 }
 
 module.exports = DB;
