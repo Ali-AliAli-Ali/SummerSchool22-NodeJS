@@ -44,8 +44,16 @@ class PosterController {
         const editedPoster = await db.editPoster(title, date_of_release, description, rating);
         res.json(editedPoster.rows[0]);
     }
-    async deletePoster(req, res) { //Admin right
 
+    async deletePoster(req, res) { //Admin right
+        const title = req.params.title;
+        const newPoster = await db.deletePoster(title);
+        /*if (!newPoster.rows.length) { 
+            console.log("The poster not found"); 
+            return res.sendStatus(404); 
+        }*/
+        console.log("The poster ", title, " deleted");
+        res.json(newPoster.rows[0]);
     }
 
     async filterPosters(req, res) {   //Admin and User right

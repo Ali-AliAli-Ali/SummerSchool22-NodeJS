@@ -12,19 +12,22 @@ class DB {
     }
 
     createPoster(title, date_of_release, description, rating) {
-        return this.pool.query(`INSERT INTO poster (title, date_of_release, description, rating) values ($1, $2, $3, $4) RETURNING *`,
+        return this.pool.query(`INSERT INTO poster (title, date_of_release, description, rating) VALUES ($1, $2, $3, $4) RETURNING *`,
             [title, date_of_release, description, rating]);
     }
     getAllPosters() {
         return this.pool.query("SELECT * FROM poster");
     }
     getPoster(title) {
-        return this.pool.query(`SELECT * FROM poster where title = $1`, [title]);
+        return this.pool.query(`SELECT * FROM poster WHERE title = $1`, [title]);
     }
 
     editPoster(title, date_of_release, description, rating) {
-        return this.pool.query('UPDATE poster set date_of_release = $2, description = $3, rating = $4 where title = $1 RETURNING *',
+        return this.pool.query('UPDATE poster SET date_of_release = $2, description = $3, rating = $4 WHERE title = $1 RETURNING *',
             [title, date_of_release, description, rating]);
+    }
+    deletePoster(title) {
+        return this.pool.query(`DELETE FROM poster WHERE title = $1`, [title]);
     }
 }
 
