@@ -6,9 +6,9 @@ class PosterController {
         if (req.headers.admin != "ADMIN123") {
             return res.sendStatus(401);
         }
-        const { title, year_of_release, description, rating } = req.body;
+        const { title, genre, year_of_release, description, rating } = req.body;
         try {
-            const newPoster = await db.createPoster(title, year_of_release, description, rating);
+            const newPoster = await db.createPoster(title, genre, year_of_release, description, rating);
             console.log("Poster of the film '", title, "',", year_of_release, ",", rating, ",", " created");
             res.json(newPoster.rows[0]);
             } 
@@ -40,20 +40,20 @@ class PosterController {
     }
 
     async editPoster(req, res) {   //Admin right
-        const { id, title, year_of_release, description, rating } = req.body;
-        const editedPoster = await db.editPoster(id, title, year_of_release, description, rating);
+        const { id, title, genre, year_of_release, description, rating } = req.body;
+        const editedPoster = await db.editPoster(id, title, genre, year_of_release, description, rating);
         console.log("The poster ", editedPoster.rows[0].id, "'", editedPoster.rows[0].title, "' edited");
         res.json(editedPoster.rows[0]);
     }
 
     async deletePoster(req, res) { //Admin right
-        const title = req.params.title;
-        const newPoster = await db.deletePoster(title);
+        const id = req.params.id;
+        const newPoster = await db.deletePoster(id);
         /*if (!newPoster.rows.length) { 
             console.log("The poster not found"); 
             return res.sendStatus(404); 
         }*/
-        console.log("The poster '", title, "' deleted");
+        console.log("The poster '", id, "' deleted");
         res.json(newPoster.rows[0]);
     }
 
