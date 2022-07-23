@@ -35,19 +35,14 @@ class PosterController {
             console.log("The poster not found"); 
             return res.sendStatus(404); 
         }
-        console.log("The poster '", newPoster.rows[0], "' gotten");
+        console.log("The poster '", newPoster.rows[0].title, "' gotten");
         res.json(newPoster.rows);
     }
 
     async editPoster(req, res) {   //Admin right
-        const { title, year_of_release, description, rating } = req.body;
-        const editedPoster = await db.editPoster(title, year_of_release, description, rating);
-        res.json(editedPoster.rows[0]);
-    }
-    async editPosterByTitle(req, res) {   //Admin right
-        //add throw if there are several posters with the same name        
-        const { title, year_of_release, description, rating } = req.body;
-        const editedPoster = await db.editPoster(title, year_of_release, description, rating);
+        const { id, title, year_of_release, description, rating } = req.body;
+        const editedPoster = await db.editPoster(id, title, year_of_release, description, rating);
+        console.log("The poster ", editedPoster.rows[0].id, "'", editedPoster.rows[0].title, "' edited");
         res.json(editedPoster.rows[0]);
     }
 

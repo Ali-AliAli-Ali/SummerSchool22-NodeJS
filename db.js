@@ -31,11 +31,6 @@ class DB {
         return this.pool.query('UPDATE posters SET title = $2, year_of_release = $3, description = $4, rating = $5 WHERE id = $1 RETURNING *',
             [id, title, year_of_release, description, rating]);
     }
-    editPosterByTitle(title, year_of_release, description, rating) {
-        //add throw if there are several posters with the same name
-        return this.pool.query('UPDATE posters SET year_of_release = $2, description = $3, rating = $4 WHERE title = $1 RETURNING *',
-            [title, year_of_release, description, rating]);
-    }
     
     deletePoster(id) {
         return this.pool.query(`DELETE FROM posters WHERE id = $1`, [id]);
