@@ -1,7 +1,8 @@
-create TABLE Poster(
-    title VARCHAR(255) PRIMARY KEY,
+create TABLE posters(
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255),
     -- picture ???
-    date_of_release TEXT,
+    year_of_release SERIAL,
     description TEXT,
     rating NUMERIC
 );

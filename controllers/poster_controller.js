@@ -6,10 +6,10 @@ class PosterController {
         if (req.headers.admin != "ADMIN123") {
             return res.sendStatus(401);
         }
-        const { title, date_of_release, description, rating } = req.body;
+        const { title, year_of_release, description, rating } = req.body;
         try {
-            const newPoster = await db.createPoster(title, date_of_release, description, rating);
-            console.log("Poster of the film '", title, "',", date_of_release, ",", rating, ",", " created");
+            const newPoster = await db.createPoster(title, year_of_release, description, rating);
+            console.log("Poster of the film '", title, "',", year_of_release, ",", rating, ",", " created");
             res.json(newPoster.rows[0]);
             } 
         catch(err) { console.log(err); return res.sendStatus(404); }
@@ -29,19 +29,25 @@ class PosterController {
     }
 
     async getPoster(req, res) {    //Admin and User right
-        const title = req.params.title;
-        const newPoster = await db.getPoster(title);
+        const name = req.params.id;
+        const newPoster = (!isNaN(name)) ? await db.getPoster(name) : await db.getPosterByTitle(name); 
         if (!newPoster.rows.length) { 
             console.log("The poster not found"); 
             return res.sendStatus(404); 
         }
-        console.log("The poster ", newPoster.rows[0], " gotten");
-        res.json(newPoster.rows[0]);
+        console.log("The poster '", newPoster.rows[0], "' gotten");
+        res.json(newPoster.rows);
     }
 
     async editPoster(req, res) {   //Admin right
-        const { title, date_of_release, description, rating } = req.body;
-        const editedPoster = await db.editPoster(title, date_of_release, description, rating);
+        const { title, year_of_release, description, rating } = req.body;
+        const editedPoster = await db.editPoster(title, year_of_release, description, rating);
+        res.json(editedPoster.rows[0]);
+    }
+    async editPosterByTitle(req, res) {   //Admin right
+        //add throw if there are several posters with the same name        
+        const { title, year_of_release, description, rating } = req.body;
+        const editedPoster = await db.editPoster(title, year_of_release, description, rating);
         res.json(editedPoster.rows[0]);
     }
 
@@ -52,7 +58,7 @@ class PosterController {
             console.log("The poster not found"); 
             return res.sendStatus(404); 
         }*/
-        console.log("The poster ", title, " deleted");
+        console.log("The poster '", title, "' deleted");
         res.json(newPoster.rows[0]);
     }
 
