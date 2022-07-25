@@ -140,7 +140,7 @@ class PosterController {
         }
         const maxrows = await db.getPostersAmount();
         if (num > Number(maxrows.rows[0].count)) num = maxrows.rows[0].count;
-        
+
         const poster = await db.getNumPosters(num);
         console.log(num, "posters gotten");
         res.json(poster.rows);
@@ -180,10 +180,13 @@ class PosterController {
         try {
 
         const id = req.params.id;
-        const poster = await db.deletePoster(id);
-        (db.getPoster(id).rows.length) ? 
-            console.log("The poster '", id, "' deleted") :
-            console.log("The poster not found");
+        let poster = await db.getPoster(id);
+        if (!poster.rows.length) { 
+            console.log("The poster not found"); 
+            return res.sendStatus(200) 
+        }
+        console.log("The poster '", id, "' deleted");
+        poster = await db.deletePoster(id);
         res.json(poster.rows[0]);
 
         } catch(err) {
