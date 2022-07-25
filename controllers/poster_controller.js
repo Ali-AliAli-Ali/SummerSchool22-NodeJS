@@ -42,9 +42,9 @@ class PosterController {
         console.log("Poster of the film '", title, "',", year_of_release, ",", rating, ",", " created");
         res.json(newPoster.rows[0]);
         
-        } catch(err) { 
-            console.log(err); 
-            return res.sendStatus(404); 
+        } catch(err) {
+            console.log(err);
+            return res.sendStatus(500);
         }
     } 
 
@@ -71,44 +71,84 @@ class PosterController {
         console.log("Picture for poster of the film '", id, "',", " uploaded");
         res.json(newPoster.rows[0]);
         
-        } catch (err) {
-            console.log("Error while uploading file");
+        } catch(err) {
+            console.log(err);
             return res.sendStatus(500);
         }
     }
 
-    async getPicture(req, res) {
-        const id = req.params.id;
-        const newPoster = await db.getPoster(id); 
-        console.log("The picture for poster '", newPoster.rows[0].title, "' gotten");
-        res.sendFile(__dirname + '/static/' + newPoster.rows[0].picture);
-    }
+    async getPicture(req, res) {   //Admin and User right
+        try {
 
-    async getPoster(req, res) {    //Admin and User right
-        const name = req.params.id;
-        const newPoster = (!isNaN(name)) ? await db.getPoster(name) : await db.getPosterByTitle(name); 
-        if (!newPoster.rows.length) { 
+        const id = req.params.id;
+        const poster = await db.getPoster(id); 
+        if (!poster.rows.length) { 
             console.log("The poster not found"); 
             return res.sendStatus(404); 
         }
-        console.log("The poster '", newPoster.rows[0].title, "' gotten");
-        res.json(newPoster.rows);
+        if (!poster.rows[0].picture) {
+            console.log("Picture is not uploaded");
+            return res.sendStatus(404);
+        }
+
+        console.log("The picture for poster '", poster.rows[0].title, "' gotten");
+        res.sendFile(__dirname + '/static/' + poster.rows[0].picture);
+        } catch(err) {
+            console.log(err);
+            return res.sendStatus(500);
+        }
+    }
+
+    async getPoster(req, res) {    //Admin and User right
+        try {
+
+        const name = req.params.id;
+        const poster = (!isNaN(name)) ? await db.getPoster(name) : await db.getPosterByTitle(name); 
+        if (!poster.rows.length) { 
+            console.log("The poster not found"); 
+            return res.sendStatus(404); 
+        }
+        console.log("The poster '", poster.rows[0].title, "' gotten");
+        res.json(poster.rows);
+
+        } catch(err) { 
+            console.log(err);
+            return res.sendStatus(500); 
+        }
     }
 
     async getAllPosters(req, res) { //Admin and User right
         try {
-            const newPoster = await db.getAllPosters();
-            console.log("All posters gotten");
-            res.json(newPoster.rows);
-            } 
-        catch(err) { console.log(err); return res.sendStatus(404); }
+
+        const poster = await db.getAllPosters();
+        console.log("All posters gotten");
+        res.json(poster.rows);
+
+        } catch(err) { 
+            console.log(err);
+            return res.sendStatus(500); 
+        }
     }
 
     async getNumPosters(req, res) {  //Admin and User right
-        const num = req.params.num;
-        const newPoster = await db.getNumPosters(num);
+        try {
+
+        let num = req.params.num;
+        if (isNaN(num) || num <= 0) {
+            console.log("Bad number of posts given");
+            return res.sendStatus(400);
+        }
+        const maxrows = await db.getPostersAmount();
+        if (num > Number(maxrows.rows[0].count)) num = maxrows.rows[0].count;
+        
+        const poster = await db.getNumPosters(num);
         console.log(num, "posters gotten");
-        res.json(newPoster.rows);
+        res.json(poster.rows);
+
+        } catch(err) {
+            console.log(err);
+            return res.sendStatus(500);
+        }
     }
 
 
@@ -117,12 +157,18 @@ class PosterController {
             console.log("Admin rights required");
             return res.sendStatus(401); 
         }
+        try {
 
         let { id, title, genre, year_of_release, description, rating, picture } = req.body;
         genre = Array.from(new Set(genre.toLowerCase().split(", "))).filter(elem => elem != "").sort().join(", ");
         const editedPoster = await db.editPoster(id, title, genre, year_of_release, description, rating, picture);
         console.log("The poster ", editedPoster.rows[0].id, "'", editedPoster.rows[0].title, "' edited");
         res.json(editedPoster.rows[0]);
+
+        } catch(err) {
+            console.log(err);
+            return res.sendStatus(500);
+        }
     }
 
 
@@ -131,18 +177,25 @@ class PosterController {
             console.log("Admin rights required");
             return res.sendStatus(401); 
         }
+        try {
 
         const id = req.params.id;
-        const newPoster = await db.deletePoster(id);
+        const poster = await db.deletePoster(id);
         (db.getPoster(id).rows.length) ? 
             console.log("The poster '", id, "' deleted") :
             console.log("The poster not found");
-        res.json(newPoster.rows[0]);
+        res.json(poster.rows[0]);
+
+        } catch(err) {
+            console.log(err);
+            return res.sendStatus(500);
+        }
     }
 
 
     async filterPosters(req, res) {   //Admin and User right
         try {
+
         let where=[];
         const params=[];
 
@@ -182,44 +235,47 @@ class PosterController {
 
 
         if (!where.length) {
-            console.log("condition not found");
+            console.log("Condition not found");
             return res.sendStatus(400);
         }
 
         const condition = where.join(' AND ');
-        const newPoster = await db.getPosterByFeature(condition, params);
-        if (!newPoster.rows.length) {
+        const poster = await db.getPosterByFeature(condition, params);
+        if (!poster.rows.length) {
             console.log("Posters not found");
             return res.sendStatus(404);
         }
         console.log("The posters with chosen characteristics gotten");
-        res.json(newPoster.rows);
+        res.json(poster.rows);
+        
         }
-        catch (err) {
-            console.error(err);
-            return res.sendStatus(500);
+        catch(err) {
+            console.log(err);
+            return res.sendStatus(400);
         }
     }
 
     async sortPosters(req, res) {     //Admin and User right
         try {
+
         let feature = req.params.feature;
-        let newPoster, acc;
+        let poster, acc;
         if (feature.endsWith("Desc")) {
             feature = feature.substring(0, feature.length - 4);
-            newPoster = await db.sortPostersDesc(feature);
+            poster = await db.sortPostersDesc(feature);
             acc = "descending";
         }
         else {
-            newPoster = await db.sortPosters(feature);
+            poster = await db.sortPosters(feature);
             acc = "";
         }
         console.log("Posters sorted by '", feature, "'", acc);
-        res.json(newPoster.rows);
+        res.json(poster.rows);
+
         }
-        catch (err) {
-            console.error(err);
-            return res.sendStatus(500);
+        catch(err) {
+            console.log(err);
+            return res.sendStatus(400);
         }
     }
     

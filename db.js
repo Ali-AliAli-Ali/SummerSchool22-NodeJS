@@ -33,6 +33,9 @@ class DB {
     getNumPosters(num) {
         return this.pool.query(`SELECT * FROM posters LIMIT $1`, [num]);
     }
+    getPostersAmount() {
+        return this.pool.query(`SELECT COUNT(*) FROM posters`);
+    }
     getAllPosters() {
         return this.pool.query("SELECT * FROM posters");
     }
