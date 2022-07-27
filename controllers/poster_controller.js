@@ -2,6 +2,7 @@ const DB = require("../db");
 const db = new DB();
 const fs = require("fs");
 
+
 function validCmp(cmp) {
     switch (cmp) {
         case '=':

@@ -1,9 +1,9 @@
 const Router = require("express"),
-    express = require("express"),
     multer = require("multer"),
     upload = multer({ dest: "controllers/static/" }),
     router = new Router(),
     posterController = require("../controllers/poster_controller");
+
 
 router.post("/poster", posterController.createPoster);
 router.post("/picture/:id", upload.single("picture"), posterController.uploadPicture);
