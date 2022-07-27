@@ -8,3 +8,6 @@ server.use(express.json());
 server.use("/api", posterRouter);
 
 server.listen(PORT, () => { console.log(`server is on port ${PORT}`); });
+
+
+exports.PORT = PORT;

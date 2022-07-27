@@ -22,7 +22,7 @@ class DB {
 
 
     getPoster(id) {
-        return this.pool.query(`SELECT * FROM posters WHERE id = $1`, [id]);
+        return this.pool.query(`SELECT * FROM posters WHERE id = $1`, [id]); 
     }
     getPosterByTitle(title) {
         return this.pool.query(`SELECT * FROM posters WHERE title = $1`, [title]);

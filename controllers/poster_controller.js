@@ -1,6 +1,7 @@
 const DB = require("../db");
 const db = new DB();
 const fs = require("fs");
+const PORT = require("../cinema_server");
 
 
 function validCmp(cmp) {
@@ -25,6 +26,13 @@ function isValidNumFeature(feature, cmp, res) {
         console.log(`Bad ${feature} condition`);
         return res.sendStatus(400);
     }
+}
+
+function picturenameToURL(poster) {
+    poster.rows.forEach(row => {
+        if (row.picture)
+            row.picture = `localhost:${PORT.PORT}/api/picture/${row.id}`;
+    });
 }
 
 
@@ -110,6 +118,7 @@ class PosterController {
             return res.sendStatus(404); 
         }
         console.log("The poster '", poster.rows[0].title, "' gotten");
+        picturenameToURL(poster);
         res.json(poster.rows);
 
         } catch(err) { 
@@ -123,6 +132,7 @@ class PosterController {
 
         const poster = await db.getAllPosters();
         console.log("All posters gotten");
+        picturenameToURL(poster);
         res.json(poster.rows);
 
         } catch(err) { 
@@ -144,6 +154,7 @@ class PosterController {
 
         const poster = await db.getNumPosters(num);
         console.log(num, "posters gotten");
+        picturenameToURL(poster);
         res.json(poster.rows);
 
         } catch(err) {
@@ -250,6 +261,7 @@ class PosterController {
             return res.sendStatus(404);
         }
         console.log("The posters with chosen characteristics gotten");
+        picturenameToURL(poster);
         res.json(poster.rows);
         
         }
@@ -274,6 +286,7 @@ class PosterController {
             acc = "";
         }
         console.log("Posters sorted by '", feature, "'", acc);
+        picturenameToURL(poster);
         res.json(poster.rows);
 
         }
