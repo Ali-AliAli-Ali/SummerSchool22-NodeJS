@@ -275,6 +275,11 @@ class PosterController {
         try {
 
         let feature = req.params.feature;
+        if (feature === "picture" || feature === "description") {
+            console.log("Unable to sort by", feature);
+            return res.sendStatus(400);
+        }
+
         let poster, acc;
         if (feature.endsWith("Desc")) {
             feature = feature.substring(0, feature.length - 4);
